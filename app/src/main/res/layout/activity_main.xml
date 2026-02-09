@@ -10,6 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottom_navigation" />
+    <EditText
+        android:id="@+id/etName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="הכנס שם"
+        android:gravity="center" />
 
     <!-- התפריט התחתון -->
     <com.google.android.material.bottomnavigation.BottomNavigationView

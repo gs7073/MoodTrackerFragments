@@ -1,6 +1,8 @@
 package com.example.moodtrackerfragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -12,36 +14,40 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        BottomNavigationView nav = findViewById(R.id.bottom_navigation);
+        EditText et = findViewById(R.id.etName);
 
-        // הגדרת מאזין ללחיצות בתפריט
-        bottomNav.setOnItemSelectedListener(item -> {
-            Fragment selectedFragment = null;
+        nav.setOnItemSelectedListener(item -> {
+            Fragment f = null;
             int id = item.getItemId();
+            int c = Color.WHITE;
 
-            // בדיקה איזה כפתור נלחץ
             if (id == R.id.nav_happy) {
-                selectedFragment = new HappyFragment();
+                f = new HappyFragment();
+                c = Color.YELLOW;
             } else if (id == R.id.nav_neutral) {
-                selectedFragment = new NeutralFragment();
+                f = new NeutralFragment();
+                c = Color.RED;
             } else if (id == R.id.nav_sad) {
-                selectedFragment = new SadFragment();
+                f = new SadFragment();
+                c = Color.BLUE;
             }
 
-            // החלפת הפרגמנט בפועל
-            if (selectedFragment != null) {
+            if (f != null) {
+                nav.setBackgroundColor(c);
+
+                String s = et.getText().toString();
+                Bundle b = new Bundle();
+                b.putString("name", s);
+                f.setArguments(b);
+
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_container, selectedFragment)
+                        .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out) // האנימציה שביקשת
+                        .replace(R.id.fragment_container, f)
                         .commit();
             }
             return true;
         });
-
-        // הצגת פרגמנט ברירת מחדל בכניסה לאפליקציה
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_container, new HappyFragment())
-                    .commit();
-        }
     }
 }
+
